@@ -21,31 +21,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  public static CommandPS4Controller driver;
+
   public static void init(){
+    driver = new CommandPS4Controller(0);
     SubsystemManager.init();
     configureBindings();
 
   }
   // The robot's subsystems and commands are defined here...
 
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public static void configureBindings() {
     swerve.setDefaultCommand(
-            swerve.driveCommand(
+            SubsystemManager.swerve.driveCommand(
                 () -> driver.getLeftX(),
                 () -> -driver.getLeftY(),
                 () -> driver.getRightX()
             )
     );
   }
-
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
 }

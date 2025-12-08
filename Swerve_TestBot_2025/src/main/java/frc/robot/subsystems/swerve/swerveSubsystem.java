@@ -21,13 +21,13 @@ import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveMath;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.math.util.MathUtil;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
-public class swerveSubsystem extends SubsystemBase {
-    private static SwerveDrive swerveDrive;
+public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveDrive swerveDrive;
-    private final ADIS16470_IMU gyro;
+    private final Pigeon2 gyro;
 
     int frontLeftDriveID  = 1;
     int frontLeftSteerID  = 2;
@@ -47,9 +47,8 @@ public class swerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem() {
 
-        // change if needed
-        gyro = new ADIS16470_IMU();
-        gyro.reset();
+        gyro = new Pigeon2(0);
+        gyro.setYaw(0);
 
         swerveDrive = new SwerveDrive(frontLeftDriveID, frontLeftSteerID, frontLeftOffset,
         frontRightDriveID, frontRightSteerID, frontRightOffset,
@@ -62,19 +61,19 @@ public class swerveSubsystem extends SubsystemBase {
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
         return run(() -> {
 
-            double x = translationX.getAsDouble();
-            double y = translationY.getAsDouble();
-            double rot = angularRotationX.getAsDouble();
+            double vx = translationX.getAsDouble();
+            double vy = translationY.getAsDouble();
+            double omega = angularRotationX.getAsDouble();
 
             //deadband
-            x = MathUtil.applyDeadband(x, 0.05);
-            y = MathUtil.applyDeadband(y, 0.05);
-            rot = MathUtil.applyDeadband(rot, 0.05);
+            vx = MathUtil.applyDeadband(vx, 0.05);
+            vy = MathUtil.applyDeadband(vy, 0.05);
+            omega = MathUtil.applyDeadband(omega, 0.05);
 
             Translation2d translation = SwerveMath.scaleTranslation(new Translation2d(
-                x * swerveDrive.getMaximumChassisVelocity(),
-                y * swerveDrive.getMaximumChassisVelocity()), 0.8);
-            double omegaRadiansPerSecond = Math.pow(rot, 3) * swerveDrive.getMaximumChassisVelocity();
+                vx * swerveDrive.getMaximumChassisVelocity(),
+                vy * swerveDrive.getMaximumChassisVelocity()), 0.8);
+            double omegaRadiansPerSecond = Math.pow(omega, 3) * swerveDrive.getMaximumChassisAngularVelocity();
 
 
             swerveDrive.drive(translation, 
