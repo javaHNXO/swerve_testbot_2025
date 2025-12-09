@@ -91,4 +91,17 @@ public class SwerveSubsystem extends SubsystemBase {
                         false);
     }
 
+    @Override
+    public void periodic() {
+        swerveDrive.periodic();
+
+        DoubleSupplier translationX = () -> RobotContainer.driver.getLeftX();
+        DoubleSupplier translationY = () -> -RobotContainer.driver.getLeftY();
+        DoubleSupplier angularRotationX = () -> RobotContainer.driver.getRightX();
+
+        Rotation2d heading = Rotation2d.fromDegrees(gyro.getYaw());
+
+        odometry.update(heading,  getCurrentSwerveModulePositions());
+    }
+
 }
