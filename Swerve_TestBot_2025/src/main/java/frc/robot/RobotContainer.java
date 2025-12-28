@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
@@ -36,11 +32,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public static void configureBindings() {
     swerve.setDefaultCommand(
-            SubsystemManager.swerve.driveCommand(
-                () -> driver.getLeftX(),
-                () -> -driver.getLeftY(),
-                () -> driver.getRightX()
-            )
+      SwerveSubsystem.driveCommand(
+          () -> driver.getLeftX(),
+          () -> -driver.getLeftY(),
+          () -> driver.getRightX()
+      )
     );
   }
 }
