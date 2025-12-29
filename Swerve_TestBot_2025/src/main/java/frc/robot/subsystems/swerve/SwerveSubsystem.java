@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +18,8 @@ import java.util.function.DoubleSupplier;
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrive swerveDrive;
     private SwerveDriveOdometry odometry;
+    private final Pigeon2 gyro = new Pigeon2(1);
+    
 
     private final File swerveJsonDir = new File(Filesystem.getDeployDirectory(), "swerve");  
 

@@ -1,8 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot;
+package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,41 +10,42 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+  
+  private static Robot instance;
+  private RobotContainer robotContainer;  
+
   public Robot() {
-    
-    RobotContainer = new RobotContainer();  
+    instance = this;
+  }
+
+  public static Robot getInstance() {
+    return instance;
   }
 
   @Override
   public void robotInit() {
-    RobotContainer.init();
+    robotContainer = new RobotContainer();
   }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
 
-  /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    robotContainer.setMotorBrakes(true);
+
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    robotContainer.setMotorBrakes(false);
+  }
 
   @Override
   public void autonomousInit() {
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -60,7 +57,6 @@ public class Robot extends TimedRobot {
     
   }
 
-  /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
